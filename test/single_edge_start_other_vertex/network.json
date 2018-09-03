@@ -1,0 +1,14 @@
+{
+  "rows": [
+    {
+      "viaGlobalId": "e",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v2"
+    }
+  ],
+  "controllers": [
+    {
+      "globalId": "v1"
+    }
+  ]
+}

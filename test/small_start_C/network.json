@@ -1,0 +1,70 @@
+{
+  "rows": [
+    {
+      "viaGlobalId": "1",
+      "fromGlobalId": "A",
+      "toGlobalId": "B"
+    },
+    {
+      "viaGlobalId": "2",
+      "fromGlobalId": "A",
+      "toGlobalId": "C"
+    },
+    {
+      "viaGlobalId": "3",
+      "fromGlobalId": "B",
+      "toGlobalId": "C"
+    },
+    {
+      "viaGlobalId": "4",
+      "fromGlobalId": "C",
+      "toGlobalId": "D"
+    },
+    {
+      "viaGlobalId": "5",
+      "fromGlobalId": "E",
+      "toGlobalId": "D"
+    },
+    {
+      "viaGlobalId": "6",
+      "fromGlobalId": "E",
+      "toGlobalId": "F"
+    },
+    {
+      "viaGlobalId": "7",
+      "fromGlobalId": "D",
+      "toGlobalId": "G"
+    },
+    {
+      "viaGlobalId": "8",
+      "fromGlobalId": "F",
+      "toGlobalId": "G"
+    },
+    {
+      "viaGlobalId": "11",
+      "fromGlobalId": "C",
+      "toGlobalId": "X"
+    },
+    {
+      "viaGlobalId": "12",
+      "fromGlobalId": "X",
+      "toGlobalId": "Y"
+    },
+    {
+      "viaGlobalId": "13",
+      "fromGlobalId": "Y",
+      "toGlobalId": "Z"
+    },
+    {
+      "viaGlobalId": "14",
+      "fromGlobalId": "Z",
+      "toGlobalId": "X"
+    }
+
+  ],
+  "controllers": [
+    {
+      "globalId": "A"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "rows": [
+    {
+      "viaGlobalId": "e12",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v2"
+    },
+		{
+      "viaGlobalId": "e13",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v3"
+    },
+		{
+      "viaGlobalId": "e14",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v4"
+    },
+		{
+      "viaGlobalId": "e15",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v5"
+    },
+		{
+      "viaGlobalId": "e23",
+      "fromGlobalId": "v2",
+      "toGlobalId": "v3"
+    },
+		{
+      "viaGlobalId": "e24",
+      "fromGlobalId": "v2",
+      "toGlobalId": "v4"
+    },
+		{
+      "viaGlobalId": "e25",
+      "fromGlobalId": "v2",
+      "toGlobalId": "v5"
+    },
+		{
+      "viaGlobalId": "e34",
+      "fromGlobalId": "v3",
+      "toGlobalId": "v4"
+    },
+		{
+      "viaGlobalId": "e35",
+      "fromGlobalId": "v3",
+      "toGlobalId": "v5"
+    },
+		{
+      "viaGlobalId": "e45",
+      "fromGlobalId": "v4",
+      "toGlobalId": "v5"
+    },
+		{
+      "viaGlobalId": "twig",
+      "fromGlobalId": "v5",
+      "toGlobalId": "leaf"
+    }
+  ],
+  "controllers": [
+    {
+      "globalId": "v1"
+    }
+  ]
+}

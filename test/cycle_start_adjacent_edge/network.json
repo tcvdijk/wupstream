@@ -1,0 +1,34 @@
+{
+  "rows": [
+    {
+      "viaGlobalId": "e12",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v2"
+    },
+		{
+      "viaGlobalId": "e23",
+      "fromGlobalId": "v2",
+      "toGlobalId": "v3"
+    },
+		{
+      "viaGlobalId": "e34",
+      "fromGlobalId": "v3",
+      "toGlobalId": "v4"
+    },
+		{
+      "viaGlobalId": "e45",
+      "fromGlobalId": "v4",
+      "toGlobalId": "v5"
+    },
+		{
+      "viaGlobalId": "e51",
+      "fromGlobalId": "v5",
+      "toGlobalId": "v1"
+    }
+  ],
+  "controllers": [
+    {
+      "globalId": "v1"
+    }
+  ]
+}

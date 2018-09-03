@@ -1,0 +1,74 @@
+
+# Official truth
+esri_naperville_electric
+forum1
+forum2
+forum3
+forum4
+
+# Graph is single edge
+single_edge_start_other_vertex
+single_edge_start_edge
+
+# Graph is clique
+k3_start_vertex
+k3_start_edge
+k3_start_adjacent_edge
+k4_start_vertex
+k4_start_edge
+k4_start_adjacent_edge
+k5_start_vertex
+k5_start_edge
+k5_start_adjacent_edge
+
+# Graph is twig on clique
+twig_start_leaf
+twig_start_twig
+twig_start_cut
+twig_start_block
+
+# Graph is cycle
+cycle_start_vertex
+cycle_start_adjacent_vertex
+cycle_start_edge
+cycle_start_adjacent_edge
+
+# Graph is disconnected
+disconnected_one
+disconnected_other
+disconnected_both
+disconnected_mismatch
+
+# A small instance
+small_start_A
+small_start_B
+small_start_C
+small_start_D
+small_start_E
+small_start_Z
+small_start_4
+
+# No controllers or start
+naperville_no_controller
+naperville_no_start
+
+# Regression testing
+patherdosrenyi_10_10
+patherdosrenyi_10_20
+patherdosrenyi_10_30
+patherdosrenyi_10_40
+patherdosrenyi_10_50
+patherdosrenyi_10_60
+patherdosrenyi_10_70
+patherdosrenyi_10_80
+patherdosrenyi_10_90
+patherdosrenyi_10_100
+patherdosrenyi_10_200
+patherdosrenyi_10_300
+patherdosrenyi_10_400
+patherdosrenyi_10_500
+patherdosrenyi_1_100
+patherdosrenyi_1_500
+patherdosrenyi_1_1000
+patherdosrenyi_1_5000
+
