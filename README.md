@@ -52,7 +52,7 @@ Depending on your processor, you may need to remove `#define RAPIDJSON_SSE42` fr
 
 Wüpstream contains an experimental parser specifically tuned for the GIS Cup file format (rather than any valid JSON).
 Its use is not recommened.
-To use it anyway, define EXPERIMENTAL_PARSER, for example like so on Linux:
+To use it anyway, define `EXPERIMENTAL_PARSER=true`, for example like so on Linux:
 ~~~
 g++ -O3 -msse4.2 -std=c++11 -D EXPERIMENTAL_PARSER=true *.cpp -o ../bin/wupstream
 ~~~
@@ -60,13 +60,17 @@ g++ -O3 -msse4.2 -std=c++11 -D EXPERIMENTAL_PARSER=true *.cpp -o ../bin/wupstrea
 
 ## Running the Demo
 
-It takes three arguments:
+Wüpstream takes three arguments:
 
-1. Network in the json format.
-2. Starting nodes in the text format.
+1. Filename of the network (json).
+2. Starting nodes (txt).
 3. Output filename.
 
 The output will likely contain the some IDs multiple times.
+
+By default, the program does no logging, but you can change this in `Log.h` by changing `DefaultLogDestination`.
+Setting it to `StdOut` will log to standard out; setting it to `LogFile` will log to a file called `log.txt`.
+The log will contain some basic timing information of the various steps of the program.
 
 ### Linux
 
@@ -100,13 +104,11 @@ There are several batches of test.
 
 * The contest instances with 'officially' correct solutions.  These should all pass.
 * Small instances with our manual solution.  This includes a number of weird corner cases.  These should all pass.
-* The 'regression testing' instances with Wüpstream's solution.  These will all pass, but we do not vouch for correctness.  If you change anything about the program and one of these tests unexpected fails, you know where to look.
-
+* The 'regression testing' instances with Wüpstream's own solution.  These will all pass, but we do not vouch for correctness.  If you change anything about the program and one of these tests unexpectedly fails, you now know where to look.
 
 # Libraries used
 
-Wüpstream use RapidJSON.
-It is free under an MIT license; get it at rapidjson.org.
+Wüpstream use RapidJSON, which is freely available under an MIT license; get it at rapidjson.org.
 
 # License
 
