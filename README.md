@@ -92,10 +92,11 @@ Example instances are available in the `test` directory.
 
 The `test` directory contains a Python 3 script to test the input/output behaviour of Wüpstream.
 It requires the `termcolor` and `colorama` packages.
-Run it as follows, assuming the Wüpstream executable is at `bin/wupstream`.
+Run it as follows, where `[executable]` is an *absolute* path to the Wüpstream (or another) executable.
+(Relative paths may work depending on your system, but might claim the file is not found.)
 
 * Go to the `tests` directory.
-* Run `python run_test.py ../bin/wupstream`
+* Run `python run_test.py [executable]`
 
 This reports `PASS` or `FAIL` for each test instance in `test_list.txt`.
 Each individual test has a time limit of 1 second; this should be plenty, but if it is violated you get `TIME`.
