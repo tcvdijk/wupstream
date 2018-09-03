@@ -19,12 +19,14 @@ However, it should be relatively easy to take the relevant parts for reuse in yo
 
 **Algorithm.**
 The upstream features in this challenge are highly related to the biconnected components of the network. First we compute a block-cut tree (augmented with information about the controllers and starting nodes) and then solve the upstream-feature problem on this tree (using two depth first searches).
-See ...url todo... for a (somewhat) more extensive description.
+See *(short paper to be released)* for a somewhat more extensive description.
 
 ## Compiling the Demo
 
+### Preparation
+
 Wüpstream uses RapidJSON.
-Get it at www.rapidjson.org and put the contents of its `include` directory in our `src` directory.
+Get it at www.rapidjson.org and put its `include/rapidjson` directory as our `src/rapidjson` directory.
 We have tested using release 1.1.0 (commit 73063f5002612c6bf64fe24f851cd5cc0d83eef9).
 
 ### Linux
