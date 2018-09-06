@@ -16,18 +16,25 @@ See http://sigspatial2018.sigspatial.org/giscup2018/ for a general description o
 
 This repository contains a demonstration program - not a plug-and-play library.
 However, it should be relatively easy to take the relevant parts for reuse in your own program.
+Do be careful about memory management: the current allocators leak (on purpose).
 
 **Algorithm.**
 The upstream features in this challenge are highly related to the biconnected components of the network. First we compute a block-cut tree (augmented with information about the controllers and starting nodes) and then solve the upstream-feature problem on this tree (using two depth first searches).
-See *(short paper to be released)* for a somewhat more extensive description.
+See the following paper for a somewhat more extensive description.
+
+* *Thomas C. van Dijk, Tobias Greiner, Bas den Heijer, Nadja Henning, Felix Klesen, and Ander Löffler.*
+  **Wüpstream: : Efficient Enumeration of Upstream Features (GIS Cup)**
+  In *Proceedings of ACM SISPATIAL (SIGSPATIAL '18).*
+  ACM, New York, NY, USA, Article to appear, 4 pages.
+  https://doi.org/ to appear.
 
 ## Compiling the Demo
 
-### Preparation
+### Libraries
 
-Wüpstream uses RapidJSON.
-Get it at www.rapidjson.org and put its `include/rapidjson` directory as our `src/rapidjson` directory.
-We have tested using release 1.1.0 (commit 73063f5002612c6bf64fe24f851cd5cc0d83eef9).
+Wüpstream uses RapidJSON for parsing and docopt for handling commandline arguments.
+Convenience copies have been provided in the repository, so you can compile 'out of the box.'
+See http://rapidjson.org/ and http://docopt.org/ for up to date versions.
 
 ### Linux
 
@@ -93,15 +100,17 @@ Example instances are available in the `test` directory.
 # Running Tests
 
 The `test` directory contains a Python 3 script to test the input/output behaviour of Wüpstream.
-It requires the `termcolor` and `colorama` packages.
-Run it as follows, where `[executable]` is an *absolute* path to the Wüpstream (or another) executable.
-(Relative paths may work depending on your system, but might claim the file is not found.)
+Its output is colour-coded if the `termcolor` package is available.
+(Windows may also require `colorama`.)
+
+Run it as follows, where `<program>` is an *absolute* path to the Wüpstream executable (or another).
+Relative paths may work depending on your system, but Python may claim the file is not found.
 
 * Go to the `tests` directory.
-* Run `python run_test.py [executable]`
+* Run `python run_test.py <executable>`
 
-This reports `PASS` or `FAIL` for each test instance in `test_list.txt`.
-Each individual test has a time limit of 1 second; this should be plenty, but if it is violated you get `TIME`.
+This script reports `PASS` or `FAIL` for each test instance in `test_list.txt`.
+Each individual test has a time limit of 1 second; this should be plenty, but if it is violated the test is reported as `TIME`.
 
 There are several batches of test.
 
@@ -111,7 +120,7 @@ There are several batches of test.
 
 # Libraries used
 
-Wüpstream use RapidJSON, which is freely available under an MIT license; get it at rapidjson.org.
+Wüpstream use RapidJSON and docopt, which are freely available under an MIT licenses.
 
 # License
 
