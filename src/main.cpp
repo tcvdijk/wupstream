@@ -16,6 +16,8 @@ using namespace std;
 using namespace rapidjson;
 const auto RapidJsonParsingFlags = kParseNumbersAsStringsFlag;
 
+#include "docopt.h"
+
 #include "Timer.h"
 #include "Util.h"
 #include "Alloc.h"
@@ -28,16 +30,36 @@ const auto RapidJsonParsingFlags = kParseNumbersAsStringsFlag;
 
 ofstream outfile;
 
+static const char USAGE[] =
+R"(Wupstream.
+    Usage:
+      wupstream <network> <starting_points> <output>
+      wupstream (-h | --help)
+
+    Arguments:
+      input            input file in json format
+      starting_points  starting points in text format
+      output           output file
+
+    Options:
+      -h --help     Show this screen.
+)";
+
 int main(int argc, char **argv) {
 
-	if (argc != 4) {
-		cerr << "Usage: program network(json) startingpoints(txt)" << endl;
-		return 1;
-	}
+	std::map<std::string, docopt::value> args = docopt::docopt(USAGE,{ argv + 1, argv + argc },
+		true,          // show help if requested
+		"Wupstream");  // version string
 
-	string networkFilename = argv[1];
-	string startingFilename = argv[2];
-	outfile.open(argv[3]);
+	//for (auto const& arg : args) {
+	//	std::cout << arg.first << ": " << arg.second << std::endl;
+	//}
+	
+	string networkFilename = args["<network>"].asString();
+	string startingFilename = args["<starting_points>"].asString();
+	string outputFilename = args["<output>"].asString();
+
+	outfile.open(outputFilename);
 
 	Timer totalTime;
 
