@@ -1,9 +1,19 @@
 import sys
 import subprocess
 
-from colorama import init as init_colorama
-init_colorama()
-from termcolor import colored
+# Windows might need Colorama for coloured output to work
+try:
+    from colorama import init as init_colorama
+    init_colorama()
+except ImportError: pass
+
+# Termcolor for coloured text. If not available, stub the 'colored' function.
+try:
+    from termcolor import colored
+except ImportError:
+    def colored(s,color): return s
+
+# Main program
 
 command = sys.argv[1]
 print('Testing:', command)
