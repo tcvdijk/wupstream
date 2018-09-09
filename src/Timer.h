@@ -4,8 +4,8 @@
 class Timer {
 	double start;
 public:
-	Timer();
-	double elapsed() const;
+	Timer() noexcept;
+	double elapsed() const noexcept;
 	double report() const;
 };
 

@@ -12,8 +12,7 @@ class Point;
 class BCNode {
 public:
 	struct Neighbor {
-		Neighbor() {}
-		Neighbor(BCNode *to, size_t reverseIndex) : to(to), reverseIndex(reverseIndex) {}
+		Neighbor(BCNode *to, size_t reverseIndex) noexcept : to(to), reverseIndex(reverseIndex) {}
 		BCNode *to;
 		bool marked{ false };
 		int reverseIndex; // to->neighbors[reverseIndex] is the reverse arc to this

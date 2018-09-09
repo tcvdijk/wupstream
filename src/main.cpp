@@ -89,13 +89,12 @@ int main(int argc, char **argv) {
 	fclose(fp);
 	fileTime.report();
 
-	string arcName;
-	Point *from, *to;
-
 	const bool experimental = EXPERIMENTAL_PARSER;
 	if (experimental) {
 		// Parser 1: Crazy, but faster. Makes many assumptions about file format.
-		char *first, *second, *third;
+		string arcName;
+		Point *from = nullptr, *to = nullptr;
+		char *first = nullptr, *second = nullptr, *third = nullptr;
 		int pos = 0;
 		char *cp = buffer;
 		while (*cp != '\0') {

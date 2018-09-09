@@ -5,11 +5,11 @@ using namespace std;
 #include "Log.h"
 #include "Timer.h"
 
-Timer::Timer() {
+Timer::Timer() noexcept {
 	start = clock();
 }
 
-double Timer::elapsed() const {
+double Timer::elapsed() const noexcept {
 	return (clock() - start) / CLOCKS_PER_SEC;
 }
 

@@ -53,7 +53,7 @@ void Network::constructBCTree() {
 			if (!bcStack.empty()) {
 				Point *from = get<0>(bcStack[0]);
 				Point *to = get<1>(bcStack[0])->to;
-				bcRoots.push_back(unwindBlock(from, to, true));
+				bcRoots.push_back(unwindBlock(from, to)); // , true));
 			}
 		}
 	}
@@ -95,7 +95,7 @@ void Network::constructBCTree(Point *p) {
 	}
 }
 
-BCNode *Network::unwindBlock(Point *p, Point *n, bool flush) {
+BCNode *Network::unwindBlock(Point *p, Point *n ) { //, bool flush) {
 	BCNode *block = new(nodeAllocator.alloc()) BCNode;
 	while ( !bcStack.empty() && ( get<0>(bcStack.back()) != p || get<1>(bcStack.back())->to != n) ) {
 		popFrame(p, block);
@@ -122,7 +122,7 @@ BCNode *Network::unwindBlock(Point *p, Point *n, bool flush) {
 }
 
 void Network::popFrame( Point *p, BCNode *block ) {
-	Point *from = get<0>(bcStack.back());
+	//Point *from = get<0>(bcStack.back());
 	Arc *arc = get<1>(bcStack.back());
 	if (!block->hasStart && arc->isStart) {
 		block->hasStart = true;
@@ -147,7 +147,7 @@ void Network::popFrame( Point *p, BCNode *block ) {
 	bcStack.pop_back();
 }
 
-void Network::markTowardController(BCNode *v, BCNode *parent) {
+void Network::markTowardController(BCNode *v, BCNode *parent) noexcept {
 	for (auto &n : v->neighbors) {
 		//assert( n.to->neighbors[n.reverseIndex].to == v );
 		if (n.to != parent) {
@@ -164,14 +164,14 @@ extern ofstream outfile;
 void Network::floodFromStartnode(BCNode *v, BCNode *parent) {
 	v->visited = true;
 	if (v->points.size() == 2) {
-		for (string &s : v->edges) outfile << s << '\n';
+		for (const string &s : v->edges) outfile << s << '\n';
 		if (v->points[0]->isController) outfile << v->points[0]->id << '\n';
 		if (v->points[1]->isController) outfile << v->points[1]->id << '\n';
 		if (v->points[0]->isStart) outfile << v->points[0]->id << '\n';
 		if (v->points[1]->isStart) outfile << v->points[1]->id << '\n';
 	} else {
-		for (string &s : v->edges) outfile << s << '\n';
-		for (Point *p : v->points) outfile << p->id << '\n';
+		for (const string &s : v->edges) outfile << s << '\n';
+		for (Point * const p : v->points) outfile << p->id << '\n';
 	}
 	for (auto &n : v->neighbors) {
 		if (n.to != parent && n.marked && !n.to->visited) {

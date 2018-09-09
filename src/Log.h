@@ -21,7 +21,7 @@ using DefaultLogDestination = Discard;
 // === Implementation ===
 
 class Discard {};
-template< typename T > Discard &operator<<(Discard &h, T x) noexcept {
+template< typename T > Discard &operator<<(Discard &h, T ) noexcept {
 	return h;
 }
 

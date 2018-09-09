@@ -22,12 +22,12 @@ public:
 template< typename T >
 class Alloc<T, true> {
 public:
-	Alloc() {;
+	Alloc() noexcept {;
 		count = 4096/sizeof(T);
 		pool = (char*)malloc(count*sizeof(T)) - sizeof(T);
 		capacity = count;
 	}
-	void *alloc() {
+	void *alloc() noexcept {
 		if (capacity == 0) {
 			// Just get a new pool; forget about the old one.
 			pool = (char*)malloc(count*sizeof(T)) - sizeof(T);

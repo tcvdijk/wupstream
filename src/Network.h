@@ -21,7 +21,7 @@ class BCNode;
 // for vertex and edge id strings.
 struct IdHasher {
 public:
-	size_t operator()(const std::string &s) const {
+	size_t operator()(const std::string &s) const noexcept {
 		return std::hash<std::string>()(s);
 	}
 };
@@ -49,14 +49,14 @@ public:
 	// Algorithm based on Hopcroft-Tarjan.
 	void constructBCTree();
 	void constructBCTree(Point *p);
-	BCNode *unwindBlock(Point *p, Point *n, bool flush = false);
+	BCNode *unwindBlock(Point *p, Point *n); // , bool flush = false);
 	void popFrame(Point *p, BCNode *block);
 	std::vector<std::tuple<Point*,Arc*>> bcStack;
 	int time{ 0 };
 	// ===================================================
 
 	// === Upstream features on block-cut tree ===========
-	void markTowardController(BCNode *v, BCNode *parent);
+	void markTowardController(BCNode *v, BCNode *parent) noexcept;
 	void floodFromStartnode(BCNode *v, BCNode *parent);
 	// ===================================================
 
