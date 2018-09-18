@@ -22,11 +22,12 @@ Do be careful about memory management: the current allocators leak (on purpose).
 The upstream features in this challenge are highly related to the biconnected components of the network. First we compute a block-cut tree (augmented with information about the controllers and starting nodes) and then solve the upstream-feature problem on this tree (using two depth first searches).
 See the following paper for a somewhat more extensive description.
 
-* *Thomas C. van Dijk, Tobias Greiner, Bas den Heijer, Nadja Henning, Felix Klesen, and Ander Löffler.*
-  **Wüpstream: : Efficient Enumeration of Upstream Features (GIS Cup)**
-  In *Proceedings of ACM SISPATIAL (SIGSPATIAL '18).*
-  ACM, New York, NY, USA, Article to appear, 4 pages.
-  https://doi.org/ to appear.
+* *Thomas C. van Dijk, Tobias Greiner, Bas den Heijer, Nadja Henning, Felix
+Klesen, and Andre Löffler.* 2018. **Wüpstream: Efficient Enumeration of Upstream
+Features (GIS Cup).** In 26th ACM SIGSPATIAL International Conference
+on Advances in Geographic Information Systems (SIGSPATIAL ’18),
+November 6–9, 2018, Seattle, WA, USA. ACM, New York, NY, USA, 4 pages.
+https://doi.org/10.1145/3274895.3276475 (To appear.)
 
 ## Compiling the Demo
 
