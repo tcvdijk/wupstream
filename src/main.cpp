@@ -13,6 +13,7 @@
 using namespace std;
 
 #include "rapidjson.h"
+#include "rapidjson/error/en.h"
 using namespace rapidjson;
 const auto RapidJsonParsingFlags = kParseNumbersAsStringsFlag;
 
@@ -57,8 +58,12 @@ int main(int argc, char **argv) {
 	string startingFilename = args["<starting_points>"].asString();
 	string outputFilename = args["<output>"].asString();
 
-	ofstream outfile;
-	outfile.open(outputFilename);
+	ofstream outFile;
+	outFile.open(outputFilename);
+	if (outFile.fail()) {
+		cerr << "Cannot open output file " << outputFilename << "\n";
+		return 1;
+	}
 
 	Timer totalTime;
 
@@ -68,6 +73,10 @@ int main(int argc, char **argv) {
 	log() << "Reading start nodes         ... ";
 	Timer startTime;
 	ifstream startFile(startingFilename);
+	if (startFile.fail()) {
+		cerr << "Cannot open starting points file " << startingFilename << "\n";
+		return 2;
+	}
 	string startId;
 	while (startFile >> startId) {
 		net.startingIds.insert(startId);
@@ -79,6 +88,10 @@ int main(int argc, char **argv) {
 	Timer fileTime;
 	FILE* fp;
 	fp = fopen(networkFilename.c_str(), fopenMode);
+	if (fp == nullptr) {
+		cerr << "Cannot open network file " << networkFilename << "\n";
+		return 3;
+	}
 	fseek(fp, 0, SEEK_END);
 	size_t filesize = (size_t)ftell(fp);
 	fseek(fp, 0, SEEK_SET);
@@ -165,6 +178,10 @@ int main(int argc, char **argv) {
 		// Afterward, buffer no longer valid string
 		dom.ParseInsitu<RapidJsonParsingFlags>(buffer);
 		parseTime.report();
+		if (dom.HasParseError()) {
+			cerr << "JSON parse error (offset "	<< dom.GetErrorOffset() << "): " << GetParseError_En(dom.GetParseError()) << "\n";
+			return 4;
+		}
 
 		// Make dictionary for Point ids; make graph structure
 		log() << "Making dictionary and graph ... ";
@@ -201,7 +218,7 @@ int main(int argc, char **argv) {
 	}
 	
 	// Enumerate upstream features; write them to outfile
-	net.outstream = &outfile;
+	net.outstream = &outFile;
 	net.enumerateUpstreamFeatures();
 	
 	// Done.
