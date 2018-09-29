@@ -160,18 +160,17 @@ void Network::markTowardController(BCNode *v, BCNode *parent) noexcept {
 	}
 }
 
-extern ofstream outfile;
 void Network::floodFromStartnode(BCNode *v, BCNode *parent) {
 	v->visited = true;
 	if (v->points.size() == 2) {
-		for (const string &s : v->edges) outfile << s << '\n';
-		if (v->points[0]->isController) outfile << v->points[0]->id << '\n';
-		if (v->points[1]->isController) outfile << v->points[1]->id << '\n';
-		if (v->points[0]->isStart) outfile << v->points[0]->id << '\n';
-		if (v->points[1]->isStart) outfile << v->points[1]->id << '\n';
+		for (const string &s : v->edges) *outstream << s << '\n';
+		if (v->points[0]->isController) *outstream << v->points[0]->id << '\n';
+		if (v->points[1]->isController) *outstream << v->points[1]->id << '\n';
+		if (v->points[0]->isStart) *outstream << v->points[0]->id << '\n';
+		if (v->points[1]->isStart) *outstream << v->points[1]->id << '\n';
 	} else {
-		for (const string &s : v->edges) outfile << s << '\n';
-		for (Point * const p : v->points) outfile << p->id << '\n';
+		for (const string &s : v->edges) *outstream << s << '\n';
+		for (Point * const p : v->points) *outstream << p->id << '\n';
 	}
 	for (auto &n : v->neighbors) {
 		if (n.to != parent && n.marked && !n.to->visited) {

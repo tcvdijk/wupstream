@@ -28,8 +28,6 @@ const auto RapidJsonParsingFlags = kParseNumbersAsStringsFlag;
 #include "Settings.h"
 #include "Log.h"
 
-ofstream outfile;
-
 static const char USAGE[] =
 R"(Wupstream.
     Usage:
@@ -59,6 +57,7 @@ int main(int argc, char **argv) {
 	string startingFilename = args["<starting_points>"].asString();
 	string outputFilename = args["<output>"].asString();
 
+	ofstream outfile;
 	outfile.open(outputFilename);
 
 	Timer totalTime;
@@ -202,6 +201,7 @@ int main(int argc, char **argv) {
 	}
 	
 	// Enumerate upstream features; write them to outfile
+	net.outstream = &outfile;
 	net.enumerateUpstreamFeatures();
 	
 	// Done.
