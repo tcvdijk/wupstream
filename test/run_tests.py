@@ -1,3 +1,17 @@
+"""Run Tests.
+
+Usage:
+  run_tests.py <program> [--list FILE]
+  run_tests.py (-h | --help)
+
+Arguments:
+  program          command to run
+
+Options:
+  --list FILE      Specify list of test cases [default: test_list.txt]
+  -h --help        Show this screen.
+
+"""
 import sys
 import subprocess
 
@@ -14,15 +28,17 @@ except ImportError:
     def colored(s,color): return s
 
 # Main program
+from docopt import docopt
+arguments = docopt(__doc__)
 
-command = sys.argv[1]
+command = arguments['<program>']
 print('Testing:', command)
 
 def line_set(fname):
     with open(fname) as file:
         return set([line.strip() for line in file.readlines()])
 
-with open('test_list.txt') as f:
+with open(arguments['--list']) as f:
     for line in f:
         line = line.strip()
         if len(line)==0: print(); continue
