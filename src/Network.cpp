@@ -23,19 +23,19 @@ using namespace rapidjson;
 void Network::enumerateUpstreamFeatures() {
 
 	log() << "Block-cut tree              ... ";
-	Timer bctTime;
+	const Timer bctTime;
 	constructBCTree();
 	bctTime.report();
 
 	log() << "Mark controllers            ... ";
-	Timer markTime;
+	const Timer markTime;
 	for (BCNode *c : controllerNodes) {
 		markTowardController(c, nullptr);
 	}
 	markTime.report();
 
 	log() << "Output upstream features    ... ";
-	Timer outputTime;
+	const Timer outputTime;
 	for (BCNode *s : startNodes) {
 		floodFromStartnode(s, nullptr);
 	}
@@ -45,7 +45,7 @@ void Network::enumerateUpstreamFeatures() {
 
 void Network::constructBCTree() {
 	for (auto pi : pointMap) {
-		Point *p = pi.second;
+		Point * const p = pi.second;
 		if (!p->visited && p->isController) {
 			time = 0;
 			constructBCTree(p);

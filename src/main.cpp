@@ -65,13 +65,13 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	Timer totalTime;
+	const Timer totalTime;
 
 	Network net;
 
 	// Read start nodes
 	log() << "Reading start nodes         ... ";
-	Timer startTime;
+	const Timer startTime;
 	std::ifstream startFile(startingFilename);
 	if (startFile.fail()) {
 		cerr << "Cannot open starting points file " << startingFilename << "\n";
@@ -85,18 +85,17 @@ int main(int argc, char **argv) {
 
 	// Read whole file into a buffer
 	log() << "Reading file                ... ";
-	Timer fileTime;
-	FILE* fp;
-	fp = fopen(networkFilename.c_str(), fopenMode);
+	const Timer fileTime;
+	FILE* fp = fopen(networkFilename.c_str(), fopenMode);
 	if (fp == nullptr) {
 		cerr << "Cannot open network file " << networkFilename << "\n";
 		return 3;
 	}
 	fseek(fp, 0, SEEK_END);
-	size_t filesize = (size_t)ftell(fp);
+	const size_t filesize = static_cast<size_t>(ftell(fp));
 	fseek(fp, 0, SEEK_SET);
-	char* buffer = (char*)malloc(filesize + 1);
-	size_t readLength = fread(buffer, 1, filesize, fp);
+	std::unique_ptr<char[]> buffer( new char[filesize + 1] );
+	size_t readLength = fread(buffer.get(), 1, filesize, fp);
 	buffer[readLength] = '\0';
 	fclose(fp);
 	fileTime.report();
@@ -108,7 +107,7 @@ int main(int argc, char **argv) {
 		Point *from = nullptr, *to = nullptr;
 		char *first = nullptr, *second = nullptr, *third = nullptr;
 		int pos = 0;
-		char *cp = buffer;
+		char *cp = buffer.get();
 		while (*cp != '\0') {
 			char c = *cp++;
 			if (c == '\"') {
@@ -162,7 +161,7 @@ int main(int argc, char **argv) {
 			}
 		}
 		for (const string &s : net.startingIds) {
-			auto it = net.pointMap.find(s);
+			const auto it = net.pointMap.find(s);
 			if (it != net.pointMap.end()) {
 				Point *p = it->second;
 				p->isStart = true;
@@ -172,11 +171,11 @@ int main(int argc, char **argv) {
 	else {
 		// Parser 2: Slower, but accepts all valid json with the right structure.
 		log() << "Parsing                     ... ";
-		Timer parseTime;
+		const Timer parseTime;
 		rapidjson::Document dom;
 		// In-situ parsing the buffer into DOM.
 		// Afterward, buffer no longer valid string
-		dom.ParseInsitu<RapidJsonParsingFlags>(buffer);
+		dom.ParseInsitu<RapidJsonParsingFlags>(buffer.get());
 		parseTime.report();
 		if (dom.HasParseError()) {
 			cerr << "JSON parse error (offset "	<< dom.GetErrorOffset() << "): " << GetParseError_En(dom.GetParseError()) << "\n";
@@ -185,7 +184,7 @@ int main(int argc, char **argv) {
 
 		// Make dictionary for Point ids; make graph structure
 		log() << "Making dictionary and graph ... ";
-		Timer dictTime;
+		const Timer dictTime;
 		for (auto &r : dom["rows"].GetArray()) {
 			Point *from = getOrMake(net.pointPool, net.pointMap, r["fromGlobalId"].GetString());
 			Point *to = getOrMake(net.pointPool, net.pointMap, r["toGlobalId"].GetString());
@@ -198,7 +197,7 @@ int main(int argc, char **argv) {
 			}
 		}
 		for (const string &s : net.startingIds) {
-			auto it = net.pointMap.find(s);
+			const auto it = net.pointMap.find(s);
 			if (it != net.pointMap.end()) {
 				Point *p = it->second;
 				p->isStart = true;
@@ -208,7 +207,7 @@ int main(int argc, char **argv) {
 
 		// Read controllers from DOM
 		log() << "Reading controllers         ... ";
-		Timer controllerTime;
+		const Timer controllerTime;
 		for (auto &r : dom["controllers"].GetArray()) {
 			string id = r["globalId"].GetString();
 			Point *p = getOrMake(net.pointPool, net.pointMap, id);

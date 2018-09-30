@@ -51,7 +51,7 @@ public:
 	std::vector<BCNode*> bcRoots;
 
 	void enumerateUpstreamFeatures(); // writes to outstream
-	std::ostream *outstream;
+	std::ostream *outstream{ 0 };
 
 	// === Block-Cut Tree ================================
 	// Algorithm based on Hopcroft-Tarjan.

@@ -14,7 +14,7 @@ double Timer::elapsed() const noexcept {
 }
 
 double Timer::report() const {
-	double t = elapsed();
-	log() << int(t * 1000) << " ms\n";
+	const double t = elapsed();
+	log() << static_cast<int>(t * 1000) << " ms\n";
 	return t;
 }
