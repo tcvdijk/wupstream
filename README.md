@@ -33,8 +33,12 @@ https://doi.org/10.1145/3274895.3276475 (To appear.)
 
 ### Libraries
 
+Wüpstream uses Boost header-only libraries for small vector optimisation and memory pools.
+In addition to the instructions below, tell your compiler where the Boost include directory is.
+See https://www.boost.org/.
+
 Wüpstream uses RapidJSON for parsing and docopt for handling commandline arguments.
-Convenience copies have been provided in the repository, so you can compile 'out of the box.'
+Convenience copies have been provided in the repository.
 See http://rapidjson.org/ and http://docopt.org/ for up to date versions.
 
 ### Linux
@@ -121,8 +125,20 @@ There are several batches of test.
 
 # Libraries used
 
-Wüpstream use RapidJSON and docopt, which are freely available under an MIT licenses.
+Wüpstream uses:
+
+* RapidJSON, which is freely available under an MIT license.
+* docopt, which is freely available under an MIT license.
+* Boost, which is freely available the Boost Software License.
 
 # License
 
-TODO
+Wüpstream is available under the MIT License.
+
+Copyright 2018 Thomas C. van Dijk, Tobias Greiner, Bas den Heijer, Nadja Henning, Felix Klesen, Andre Löffler. 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
