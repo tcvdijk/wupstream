@@ -1,7 +1,7 @@
 """Run Tests.
 
 Usage:
-  run_tests.py <program> [--list FILE]
+  run_tests.py <program> [--list FILE] [--timeout=T]
   run_tests.py (-h | --help)
 
 Arguments:
@@ -9,6 +9,7 @@ Arguments:
 
 Options:
   --list FILE      Specify list of test cases [default: test_list.txt]
+  -t --timeout T   Timeout of individual cases, in seconds. [default: 1]
   -h --help        Show this screen.
 
 """
@@ -34,6 +35,12 @@ arguments = docopt(__doc__)
 command = arguments['<program>']
 print('Testing:', command)
 
+try:
+    timeout_arg = float(arguments['--timeout'])
+except ValueError:
+    print('Timeout argument is not a number:', arguments['--timeout'])
+    sys.exit()
+
 def line_set(fname):
     with open(fname) as file:
         return set([line.strip() for line in file.readlines()])
@@ -50,7 +57,7 @@ with open(arguments['--list']) as f:
         expected_filename = 'expected.txt'
         print('{0:35} [ '.format(base+' '),end='')
         try:
-            subprocess.run([command,network_filename,starting_filename,result_filename], cwd=base, check=True, timeout=1)
+            subprocess.run([command,network_filename,starting_filename,result_filename], cwd=base, check=True, timeout=timeout_arg)
             result_lines = line_set(base+'/'+result_filename)
             expected_lines = line_set(base+'/'+expected_filename)
             if set(result_lines) == set(expected_lines):
