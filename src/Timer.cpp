@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-using namespace std;
+using std::clock;
 
 #include "Log.h"
 #include "Timer.h"

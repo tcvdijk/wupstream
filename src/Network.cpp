@@ -1,6 +1,11 @@
-#include <iostream>
+#include <string>
+using std::string;
+
 #include <algorithm>
-using namespace std;
+using std::get, std::min;
+
+#include <tuple>
+using std::make_tuple;
 
 #include "rapidjson.h"
 using namespace rapidjson;

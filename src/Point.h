@@ -4,7 +4,6 @@
 #define INCLUDED_POINT
 
 #include <string>
-#include <vector>
 #include "Settings.h"
 
 class Arc;

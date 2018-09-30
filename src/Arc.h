@@ -4,7 +4,6 @@
 #define INCLUDED_ARC
 
 #include <string>
-#include <vector>
 
 class Point;
 

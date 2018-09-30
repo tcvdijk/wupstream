@@ -5,7 +5,6 @@
 #ifndef INCLUDED_NETWORK
 #define INCLUDED_NETWORK
 
-#include <stack>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -35,7 +34,7 @@ public:
 	static Alloc<Arc, LeakMoreMemory> arcAllocator;
 
 	// Points of the network
-	std::unordered_map<string, Point*, IdHasher> pointMap;
+	std::unordered_map<std::string, Point*, IdHasher> pointMap;
 
 	// Upstream instance information and BC-tree
 	std::unordered_set<std::string> startingIds;
@@ -44,7 +43,7 @@ public:
 	std::vector<BCNode*> bcRoots;
 
 	void enumerateUpstreamFeatures(); // writes to outstream
-	ostream *outstream;
+	std::ostream *outstream;
 
 	// === Block-Cut Tree ================================
 	// Algorithm based on Hopcroft-Tarjan.

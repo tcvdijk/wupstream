@@ -3,19 +3,20 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
+using std::cout, std::cerr;
+
 #include <fstream>
+using std::ifstream, std::ofstream, std::ostream;
+
 #include <string>
+using std::string;
+
 #include <cstdio>
-#include <cassert>
-#include <unordered_set>
-#include <vector>
-#include <algorithm>
-using namespace std;
+using std::fopen;
 
 #include "rapidjson.h"
 #include "rapidjson/error/en.h"
-using namespace rapidjson;
-const auto RapidJsonParsingFlags = kParseNumbersAsStringsFlag;
+const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
 
 #include "docopt.h"
 
@@ -72,7 +73,7 @@ int main(int argc, char **argv) {
 	// Read start nodes
 	log() << "Reading start nodes         ... ";
 	Timer startTime;
-	ifstream startFile(startingFilename);
+	std::ifstream startFile(startingFilename);
 	if (startFile.fail()) {
 		cerr << "Cannot open starting points file " << startingFilename << "\n";
 		return 2;
@@ -173,7 +174,7 @@ int main(int argc, char **argv) {
 		// Parser 2: Slower, but accepts all valid json with the right structure.
 		log() << "Parsing                     ... ";
 		Timer parseTime;
-		Document dom;
+		rapidjson::Document dom;
 		// In-situ parsing the buffer into DOM.
 		// Afterward, buffer no longer valid string
 		dom.ParseInsitu<RapidJsonParsingFlags>(buffer);

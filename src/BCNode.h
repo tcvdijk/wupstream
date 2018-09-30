@@ -3,7 +3,6 @@
 #ifndef INCLUDED_NODE
 #define INCLUDED_NODE
 
-#include <sstream>
 #include <string>
 #include "Settings.h"
 
