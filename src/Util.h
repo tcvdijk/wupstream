@@ -11,7 +11,7 @@ template< typename T, typename Allocator, typename Hasher >
 T *getOrMake(Allocator &alloc, std::unordered_map<std::string, T*, Hasher> &m, const std::string &k) {
 	T *&v = m[k];
 	if (v == nullptr) {
-		v = new(alloc.alloc()) T(k);
+		v = new(alloc.malloc()) T(k);
 	}
 	return v;
 }

@@ -9,12 +9,13 @@
 #include <unordered_set>
 #include <vector>
 
-#include "Settings.h"
-#include "Alloc.h"
+#include <boost/pool/pool.hpp>
 
-class Point;
-class Arc;
-class BCNode;
+#include "Settings.h"
+
+#include "Point.h"
+#include "Arc.h"
+#include "BCNode.h"
 
 // Replace here if you want to use a different hash function
 // for vertex and edge id strings.
@@ -28,10 +29,10 @@ public:
 class Network {
 public:
 
-	// Allocators
-	static Alloc<BCNode, LeakMoreMemory> nodeAllocator;
-	static Alloc<Point, LeakMoreMemory> pointAllocator;
-	static Alloc<Arc, LeakMoreMemory> arcAllocator;
+	// Memory pools
+	boost::pool<> nodePool{ sizeof(BCNode) };
+	boost::pool<> pointPool{ sizeof(Point) };
+	boost::pool<> arcPool{ sizeof(Arc) };
 
 	// Points of the network
 	std::unordered_map<std::string, Point*, IdHasher> pointMap;

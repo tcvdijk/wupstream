@@ -13,18 +13,12 @@ using namespace rapidjson;
 #include "Timer.h"
 #include "Util.h"
 
-#include "Alloc.h"
-
 #include "Network.h"
 #include "Point.h"
 #include "Arc.h"
 #include "BCNode.h"
 
 #include "Log.h"
-
-Alloc<BCNode, LeakMoreMemory> Network::nodeAllocator;
-Alloc<Point, LeakMoreMemory> Network::pointAllocator;
-Alloc<Arc, LeakMoreMemory> Network::arcAllocator;
 
 void Network::enumerateUpstreamFeatures() {
 
@@ -78,7 +72,7 @@ void Network::constructBCTree(Point *p) {
 			p->low = min(p->low, n->low);
 			if ( (p->time>0 && n->low >= p->time) || (p->dfsParent==nullptr && childCount>1) ) {
 				if (p->articulation == nullptr) {
-					p->articulation = new(nodeAllocator.alloc()) BCNode;
+					p->articulation = new(nodePool.malloc()) BCNode;
 					p->articulation->points.push_back(p);
 					if (p->isController) {
 						p->articulation->hasController = true;
@@ -101,7 +95,7 @@ void Network::constructBCTree(Point *p) {
 }
 
 BCNode *Network::unwindBlock(Point *p, Point *n ) { //, bool flush) {
-	BCNode *block = new(nodeAllocator.alloc()) BCNode;
+	BCNode *block = new(nodePool.malloc()) BCNode;
 	while ( !bcStack.empty() && ( get<0>(bcStack.back()) != p || get<1>(bcStack.back())->to != n) ) {
 		popFrame(p, block);
 	}

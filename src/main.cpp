@@ -22,7 +22,6 @@ const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
 
 #include "Timer.h"
 #include "Util.h"
-#include "Alloc.h"
 #include "Point.h"
 #include "Arc.h"
 #include "BCNode.h"
@@ -122,7 +121,7 @@ int main(int argc, char **argv) {
 						cp += 40;
 						c = *cp++;
 						if (c == 'a') {
-							Point *p = getOrMake(Network::pointAllocator, net.pointMap, string(first));
+							Point *p = getOrMake(net.pointPool, net.pointMap, string(first));
 							p->isController = true;
 							pos = 3;
 						}
@@ -142,11 +141,11 @@ int main(int argc, char **argv) {
 						third[38] = '\0';
 						cp += 115;
 						pos = 0;
-						from = getOrMake(Network::pointAllocator, net.pointMap, string(second));
-						to = getOrMake(Network::pointAllocator, net.pointMap, string(third));
+						from = getOrMake(net.pointPool, net.pointMap, string(second));
+						to = getOrMake(net.pointPool, net.pointMap, string(third));
 						arcName = string(first);
-						from->arcs.push_back(new Arc(to, arcName));
-						to->arcs.push_back(new Arc(from, arcName));
+						from->arcs.push_back(new(net.arcPool.malloc()) Arc(to, arcName));
+						to->arcs.push_back(new(net.arcPool.malloc()) Arc(from, arcName));
 						if (net.startingIds.count(arcName)) {
 							from->arcs.back()->isStart = true;
 							to->arcs.back()->isStart = true;
@@ -156,7 +155,7 @@ int main(int argc, char **argv) {
 						third = cp;
 						third[38] = '\0';
 						cp += 115;
-						Point *p = getOrMake(Network::pointAllocator, net.pointMap, string(third));
+						Point *p = getOrMake(net.pointPool, net.pointMap, string(third));
 						p->isController = true;
 					}
 				}
@@ -188,11 +187,11 @@ int main(int argc, char **argv) {
 		log() << "Making dictionary and graph ... ";
 		Timer dictTime;
 		for (auto &r : dom["rows"].GetArray()) {
-			Point *from = getOrMake(Network::pointAllocator, net.pointMap, r["fromGlobalId"].GetString());
-			Point *to = getOrMake(Network::pointAllocator, net.pointMap, r["toGlobalId"].GetString());
+			Point *from = getOrMake(net.pointPool, net.pointMap, r["fromGlobalId"].GetString());
+			Point *to = getOrMake(net.pointPool, net.pointMap, r["toGlobalId"].GetString());
 			string arcName = r["viaGlobalId"].GetString();
-			from->arcs.push_back(new Arc(to, arcName));
-			to->arcs.push_back(new Arc(from, arcName));
+			from->arcs.push_back(new(net.arcPool.malloc()) Arc(to, arcName));
+			to->arcs.push_back(new(net.arcPool.malloc()) Arc(from, arcName));
 			if (net.startingIds.count(arcName)) {
 				from->arcs.back()->isStart = true;
 				to->arcs.back()->isStart = true;
@@ -212,7 +211,7 @@ int main(int argc, char **argv) {
 		Timer controllerTime;
 		for (auto &r : dom["controllers"].GetArray()) {
 			string id = r["globalId"].GetString();
-			Point *p = getOrMake(Network::pointAllocator, net.pointMap, id);
+			Point *p = getOrMake(net.pointPool, net.pointMap, id);
 			p->isController = true;
 		}
 		controllerTime.report();
