@@ -29,7 +29,14 @@ public:
 class Network {
 public:
 
-	// Memory pools
+	// Network is non-copyable
+	Network(const Network&) = delete;
+	Network &operator=(const Network&) = delete;
+	Network() = default;
+
+	// Memory pools.
+	// Allocate all points, arcs and nodes using these; they will not be destructed.
+	// Memory is freed when the network is destructed;
 	boost::pool<> nodePool{ sizeof(BCNode) };
 	boost::pool<> pointPool{ sizeof(Point) };
 	boost::pool<> arcPool{ sizeof(Arc) };
