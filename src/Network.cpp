@@ -2,7 +2,8 @@
 using std::string;
 
 #include <algorithm>
-using std::get, std::min;
+using std::get;
+using std::min;
 
 #include <tuple>
 using std::make_tuple;

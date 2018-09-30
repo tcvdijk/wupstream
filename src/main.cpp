@@ -3,10 +3,13 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
-using std::cout, std::cerr;
+using std::cout;
+using std::cerr;
 
 #include <fstream>
-using std::ifstream, std::ofstream, std::ostream;
+using std::ifstream;
+using std::ofstream;
+using std::ostream;
 
 #include <string>
 using std::string;
