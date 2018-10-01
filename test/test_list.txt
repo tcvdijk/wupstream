@@ -1,6 +1,9 @@
 
 # Official truth
 esri_naperville_electric
+website_figure1
+website_figure2
+website_figure3
 forum1
 forum2
 forum3

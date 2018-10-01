@@ -1,0 +1,89 @@
+{
+  "rows": [
+    {
+      "viaGlobalId": "e1",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v2"
+    },
+    {
+      "viaGlobalId": "e2",
+      "fromGlobalId": "v1",
+      "toGlobalId": "v3"
+    },
+    {
+      "viaGlobalId": "e3",
+      "fromGlobalId": "v2",
+      "toGlobalId": "v3"
+    },
+    {
+      "viaGlobalId": "e4",
+      "fromGlobalId": "v3",
+      "toGlobalId": "v4"
+    },
+    {
+      "viaGlobalId": "e5",
+      "fromGlobalId": "v4",
+      "toGlobalId": "v5"
+    },
+    {
+      "viaGlobalId": "e6",
+      "fromGlobalId": "v4",
+      "toGlobalId": "v6"
+    },
+    {
+      "viaGlobalId": "e7",
+      "fromGlobalId": "v5",
+      "toGlobalId": "v7"
+    },
+    {
+      "viaGlobalId": "e8",
+      "fromGlobalId": "v7",
+      "toGlobalId": "v6"
+    },
+    {
+      "viaGlobalId": "e9",
+      "fromGlobalId": "c1",
+      "toGlobalId": "v7"
+    },
+    {
+      "viaGlobalId": "e10",
+      "fromGlobalId": "v7",
+      "toGlobalId": "v8"
+    },
+    {
+      "viaGlobalId": "e11",
+      "fromGlobalId": "v8",
+      "toGlobalId": "v9"
+    },
+    {
+      "viaGlobalId": "e12",
+      "fromGlobalId": "v9",
+      "toGlobalId": "v7"
+    },
+    {
+      "viaGlobalId": "e13",
+      "fromGlobalId": "v6",
+      "toGlobalId": "v10"
+    },
+    {
+      "viaGlobalId": "e14",
+      "fromGlobalId": "v6",
+      "toGlobalId": "v12"
+    },
+    {
+      "viaGlobalId": "e15",
+      "fromGlobalId": "v4",
+      "toGlobalId": "s1"
+    },
+    {
+      "viaGlobalId": "e16",
+      "fromGlobalId": "s1",
+      "toGlobalId": "v11"
+    }
+  ],
+  "controllers": [
+    {
+      "globalId": "c1"
+    }
+  ]
+}
