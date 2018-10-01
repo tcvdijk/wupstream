@@ -44,6 +44,7 @@ See http://rapidjson.org/ and http://docopt.org/ for up to date versions.
 ### Linux
 
 Compile using the following command in the src directory; it makes an executable in the bin directory.
+If your compiler is not set up to find the Boost include files, add `-I/path/to/boost` with the root of your boost directory.
 
 ~~~
 g++ -O3 -msse4.2 -std=c++11 *.cpp -o ../bin/wupstream
