@@ -38,16 +38,16 @@ const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
 static const char USAGE[] =
 R"(Wupstream.
     Usage:
-      wupstream <network> <starting_points> <output>
+      wupstream <network> <starting_points> [<output>]
       wupstream (-h | --help)
 
     Arguments:
-      input            input file in json format
-      starting_points  starting points in text format
-      output           output file
+      network          Input file in json format.
+      starting_points  Starting points in text format.
+      output           Output file; if omitted, output to stdout.
 
     Options:
-      -h --help     Show this screen.
+      -h --help        Show this screen.
 )";
 
 int main(int argc, char **argv) {
@@ -55,20 +55,18 @@ int main(int argc, char **argv) {
 	std::map<std::string, docopt::value> args = docopt::docopt(USAGE,{ argv + 1, argv + argc },
 		true,          // show help if requested
 		"Wupstream");  // version string
-
-	//for (auto const& arg : args) {
-	//	std::cout << arg.first << ": " << arg.second << std::endl;
-	//}
 	
 	string networkFilename = args["<network>"].asString();
 	string startingFilename = args["<starting_points>"].asString();
-	string outputFilename = args["<output>"].asString();
 
 	ofstream outFile;
-	outFile.open(outputFilename);
-	if (outFile.fail()) {
-		cerr << "Cannot open output file " << outputFilename << "\n";
-		return 1;
+	if (args["<output>"]) {
+		string outputFilename = args["<output>"].asString();
+		outFile.open(outputFilename);
+		if (outFile.fail()) {
+			cerr << "Cannot open output file " << outputFilename << "\n";
+			return 1;
+		}
 	}
 
 	const Timer totalTime;
@@ -222,8 +220,13 @@ int main(int argc, char **argv) {
 		controllerTime.report();
 	}
 	
-	// Enumerate upstream features; write them to outfile
-	net.outstream = &outFile;
+	// Enumerate upstream features; write them to outfile or cout
+	if (outFile.is_open()) {
+		net.outstream = &outFile;
+	}
+	else {
+		net.outstream = &cout;
+	}
 	net.enumerateUpstreamFeatures();
 	
 	// Done.
