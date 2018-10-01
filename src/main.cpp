@@ -17,6 +17,9 @@ using std::string;
 #include <cstdio>
 using std::fopen;
 
+#include <memory>
+using std::unique_ptr;
+
 #include "rapidjson.h"
 #include "rapidjson/error/en.h"
 const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
@@ -97,7 +100,7 @@ int main(int argc, char **argv) {
 	fseek(fp, 0, SEEK_END);
 	const size_t filesize = static_cast<size_t>(ftell(fp));
 	fseek(fp, 0, SEEK_SET);
-	std::unique_ptr<char[]> buffer( new char[filesize + 1] );
+	unique_ptr<char[]> buffer( new char[filesize + 1] );
 	size_t readLength = fread(buffer.get(), 1, filesize, fp);
 	buffer[readLength] = '\0';
 	fclose(fp);
