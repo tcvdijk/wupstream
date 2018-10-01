@@ -38,7 +38,7 @@ const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
 static const char USAGE[] =
 R"(Wupstream.
     Usage:
-      wupstream <network> <starting_points> [<output>]
+      wupstream <network> <starting_points> [<output>] [--experimental-parser]
       wupstream (-h | --help)
 
     Arguments:
@@ -47,7 +47,8 @@ R"(Wupstream.
       output           Output file; if omitted, output to stdout.
 
     Options:
-      -h --help        Show this screen.
+      -e --experimental-parser  Use crazy parser. Fast, but might crash or silently fail.
+      -h --help                 Show this screen.
 )";
 
 int main(int argc, char **argv) {
@@ -58,6 +59,7 @@ int main(int argc, char **argv) {
 	
 	string networkFilename = args["<network>"].asString();
 	string startingFilename = args["<starting_points>"].asString();
+	const bool experimental_parser = args["--experimental-parser"].asBool();
 
 	ofstream outFile;
 	if (args["<output>"]) {
@@ -104,8 +106,7 @@ int main(int argc, char **argv) {
 	fclose(fp);
 	fileTime.report();
 
-	const bool experimental = EXPERIMENTAL_PARSER;
-	if (experimental) {
+	if (experimental_parser) {
 		// Parser 1: Crazy, but faster. Makes many assumptions about file format.
 		string arcName;
 		Point *from = nullptr, *to = nullptr;

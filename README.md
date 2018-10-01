@@ -16,10 +16,10 @@ See http://sigspatial2018.sigspatial.org/giscup2018/ for a general description o
 
 This repository contains a demonstration program - not a plug-and-play library.
 However, it should be relatively easy to take the relevant parts for reuse in your own program.
-Do be careful about memory management: the current allocators leak (on purpose).
 
 **Algorithm.**
-The upstream features in this challenge are highly related to the biconnected components of the network. First we compute a block-cut tree (augmented with information about the controllers and starting nodes) and then solve the upstream-feature problem on this tree (using two depth first searches).
+The upstream features in this challenge are highly related to the biconnected components of the network.
+First we compute a block-cut tree (augmented with information about the controllers and starting nodes) and then solve the upstream-feature problem on this tree (using two depth first searches).
 See the following paper for a somewhat more extensive description.
 
 * *Thomas C. van Dijk, Tobias Greiner, Bas den Heijer, Nadja Henning, Felix
@@ -34,7 +34,6 @@ https://doi.org/10.1145/3274895.3276475 (To appear.)
 ### Libraries
 
 Wüpstream uses Boost header-only libraries for small vector optimisation and memory pools.
-In addition to the instructions below, tell your compiler where the Boost include directory is.
 See https://www.boost.org/.
 
 Wüpstream uses RapidJSON for parsing and docopt for handling commandline arguments.
@@ -66,20 +65,17 @@ Depending on your processor, you may need to remove `#define RAPIDJSON_SSE42` fr
 ### Experimental Parser
 
 Wüpstream contains an experimental parser specifically tuned for the GIS Cup file format (rather than any valid JSON).
+It requires 38-character IDs and makes assumptions about the order of the fields.
 Its use is not recommened.
-To use it anyway, define `EXPERIMENTAL_PARSER=true`, for example like so on Linux:
-~~~
-g++ -O3 -msse4.2 -std=c++11 -D EXPERIMENTAL_PARSER=true *.cpp -o ../bin/wupstream
-~~~
-
+To use it anyway, run with the `--experimental-parser` option.
 
 ## Running the Demo
 
-Wüpstream takes three arguments:
+Wüpstream takes two or three arguments:
 
 1. Filename of the network (json).
 2. Starting nodes (txt).
-3. Output filename.
+3. Optionally, the output filename. Otherwise, output is given on stdout.
 
 The output will likely contain the some IDs multiple times.
 
@@ -92,7 +88,7 @@ The log will contain some basic timing information of the various steps of the p
 Compiling using the command suggested above results in `bin/wupstream`.
 For example, run the following from the root directory:
 ~~~
-bin/wupstream test/esri_naperville_electric/network.json test/esri_naperville_electric/start.txt output.txt
+bin/wupstream test/esri_naperville_electric/network.json test/esri_naperville_electric/start.txt
 ~~~
 See the `test` directory for more example instances.
 
@@ -109,7 +105,7 @@ The `test` directory contains a Python 3 script to test the input/output behavio
 Its output is colour-coded if the `termcolor` package is available.
 (Windows may also require `colorama`.)
 
-Run it as follows, where `<program>` is an *absolute* path to the Wüpstream executable (or another).
+Run it as follows, where `<program>` is an *absolute* path to the Wüpstream (or other) executable.
 Relative paths may work depending on your system, but Python may claim the file is not found.
 
 * Go to the `tests` directory.
@@ -117,6 +113,7 @@ Relative paths may work depending on your system, but Python may claim the file 
 
 This script reports `PASS` or `FAIL` for each test instance in `test_list.txt`.
 Each individual test has a time limit of 1 second; this should be plenty, but if it is violated the test is reported as `TIME`.
+For further options, see `run_test.py -h`.
 
 There are several batches of test.
 
@@ -130,7 +127,7 @@ Wüpstream uses:
 
 * RapidJSON, which is freely available under an MIT license.
 * docopt, which is freely available under an MIT license.
-* Boost, which is freely available the Boost Software License.
+* Boost, which is freely available under the Boost Software License.
 
 # License
 
