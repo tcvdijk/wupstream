@@ -10,8 +10,8 @@ class Point;
 class Arc {
 public:
 	Arc(Point *to, const std::string &id) : to(to), id(id), isStart(false) {}
-	std::string id;
 	Point *to;
+	std::string id;
 	bool isStart;
 };
 
