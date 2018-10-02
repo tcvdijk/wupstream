@@ -44,7 +44,7 @@ template< typename R = DefaultLogDestination >
 R &log() {
 	static R r;
 	return r;
-};
+}
 
 
 #endif //ndef INCLUDED_LOG
