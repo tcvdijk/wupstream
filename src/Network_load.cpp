@@ -69,6 +69,26 @@ using std::find;
 #include <functional>
 using std::boyer_moore_horspool_searcher;
 
+struct Crawler {
+	Crawler(char *progress, int length) : progress(progress), last(progress + length), backup(nullptr) {}
+	char *progress;
+	char *last;
+	char *backup;
+	void checkpoint() { backup = progress; }
+	void revert() { progress = backup; }
+	bool done() { return progress > last; }
+	template<class Search> string next( const Search &search ) {
+		if (done()) return string("");
+		progress = search(progress, last).second;
+		if (done()) return string("");
+		progress = find(progress, last, '"') + 1;
+		if (done()) return string("");
+		char *close = find(progress, last, '"');
+		*close = 0;
+		return string(progress, close - progress);
+	}
+};
+
 void Network::load_quick(const string &network_filename, const string &starting_filename) {
 	const Timer parseTime;
 	log() << "Parsing (quick)             ... ";
@@ -79,47 +99,23 @@ void Network::load_quick(const string &network_filename, const string &starting_
 	
 	// set up boyer-moore-horspool machines
 	const string fromKeyword = "fromGlobalId\"";
-	auto searchFrom = std::boyer_moore_horspool_searcher(fromKeyword.begin(), fromKeyword.end());
+	const auto searchFrom = std::boyer_moore_horspool_searcher(fromKeyword.begin(), fromKeyword.end());
 	const string toKeyword = "toGlobalId\"";
-	auto searchTo = std::boyer_moore_horspool_searcher(toKeyword.begin(), toKeyword.end());
+	const auto searchTo = std::boyer_moore_horspool_searcher(toKeyword.begin(), toKeyword.end());
 	const string viaKeyword = "viaGlobalId\"";
-	auto searchVia = std::boyer_moore_horspool_searcher(viaKeyword.begin(), viaKeyword.end());
+	const auto searchVia = std::boyer_moore_horspool_searcher(viaKeyword.begin(), viaKeyword.end());
 	const string controllerKeyword = "globalId\"";
-	auto searchController = std::boyer_moore_horspool_searcher(controllerKeyword.begin(), controllerKeyword.end());
+	const auto searchController = std::boyer_moore_horspool_searcher(controllerKeyword.begin(), controllerKeyword.end());
 
 	// search through file
-	char *progress = buffer.get();
-	char *last = buffer.get() + buffer_length; 
-	char *latestSuccess = progress;
 	log<LogParseEvents>() << '\n';
-	while (progress <= last) {
-		// via
-		progress = searchVia(progress, last).second;
-		if (progress > last) break;
-		progress = find(progress, last, '"') + 1;
-		if (progress > last) break;
-		char *close = find(progress, last, '"');
-		*close = 0;
-		string viaId(progress, close - progress);
-		// from
-		progress = searchFrom(close, last).second;
-		if (progress > last) break;
-		progress = find(progress, last, '"') + 1;
-		if (progress > last) break;
-		close = find(progress, last, '"');
-		*close = 0;
-		string fromId(progress, close - progress);
-		// to
-		progress = searchTo(close, last).second;
-		if (progress > last) break;
-		progress = find(progress, last, '"') + 1;
-		if (progress > last) break;
-		close = find(progress, last, '"');
-		*close = 0;
-		string toId(progress, close - progress);
-		// print
-		latestSuccess = progress;
-		log<LogParseEvents>() << "Row: " << viaId << " " << fromId << " " << toId << '\n';
+	Crawler state(buffer.get(), buffer_length);
+	while (!state.done()) {
+		string viaId = state.next(searchVia);
+		string fromId = state.next(searchFrom);
+		string toId = state.next(searchTo);
+		if (state.done()) break;
+		state.checkpoint();
 		Point *from = getOrMake(fromId);
 		Point *to = getOrMake(toId);
 		from->arcs.push_back(new(arcPool.malloc()) Arc(to, viaId));
@@ -128,20 +124,15 @@ void Network::load_quick(const string &network_filename, const string &starting_
 			from->arcs.back()->isStart = true;
 			to->arcs.back()->isStart = true;
 		}
+		log<LogParseEvents>() << "Row: " << viaId << " " << fromId << " " << toId << '\n';
 	}
-	progress = latestSuccess;
-	while (progress <= last) {
-		progress = searchController(progress, last).second;
-		if (progress > last) break;
-		progress = find(progress, last, '"') + 1;
-		if (progress > last) break;
-		char *close = find(progress, last, '"');
-		*close = 0;
-		string controllerId(progress, close - progress);
-		// print
-		log<LogParseEvents>() << "Controller: " << controllerId << '\n';
+	state.revert();
+	while (!state.done()) {
+		string controllerId = state.next(searchController);
+		if (state.done()) break;
 		Point *p = getOrMake(controllerId);
 		p->isController = true;
+		log<LogParseEvents>() << "Controller: " << controllerId << '\n';
 	}
 
 	parseTime.report();
