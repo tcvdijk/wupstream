@@ -23,6 +23,17 @@ using namespace rapidjson;
 
 #include "Log.h"
 
+void Network::addEdge(const string &fromId, const string &toId, const string &viaId) {
+	Point *from = getOrMake(fromId);
+	Point *to = getOrMake(toId);
+	from->arcs.push_back(new(arcPool.malloc()) Arc(to, viaId));
+	to->arcs.push_back(new(arcPool.malloc()) Arc(from, viaId));
+	if (startingIds.count(viaId)) {
+		from->arcs.back()->isStart = true;
+		to->arcs.back()->isStart = true;
+	}
+}
+
 void Network::enumerateUpstreamFeatures( ostream *result_stream ) {
 
 	outstream = result_stream;

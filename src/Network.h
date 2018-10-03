@@ -32,12 +32,10 @@ public:
 class Network {
 public:
 
-	// === Calculate upstream features ===================
-
 	// Calculate upstream features and write to result stream
 	void enumerateUpstreamFeatures( std::ostream *result_stream);
 
-	// === Constructors ==================================
+	// === Constructing the network ======================
 	
 	// You should default-construct the Network and load a network using the load method.
 	Network() = default;
@@ -46,13 +44,16 @@ public:
 	Network(const Network&) = delete;
 	Network &operator=(const Network&) = delete;
 
+	// Create an edge
+	void addEdge(const std::string &fromId, const std::string &toId, const std::string &viaId);
+
 	// === Loading instances from file ===================
 	
 	// Properly load network using RapidJSON to actually parse the json.
 	// Gives parse errors on invalid json.
 	// This is the recommended load method.
 	void load(const std::string &network_filename, const std::string &starting_filename);
-	
+
 	// (Usually) faster way to load a network: does not validate the json and ignores the structure.
 	// Assumes rows are given by viaGlobalId, fromGlobalId and toGlobalId in that order,
 	//     and those strings do not otherwise occur in the file.

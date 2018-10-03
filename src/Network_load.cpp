@@ -33,21 +33,12 @@ void Network::load(const string &network_filename, const string &starting_filena
 
 	// Make dictionary for Point ids; make graph structure
 	for (auto &r : dom["rows"].GetArray()) {
-		Point *from = getOrMake(r["fromGlobalId"].GetString());
-		Point *to = getOrMake(r["toGlobalId"].GetString());
-		string arcName = r["viaGlobalId"].GetString();
-		from->arcs.push_back(new(arcPool.malloc()) Arc(to, arcName));
-		to->arcs.push_back(new(arcPool.malloc()) Arc(from, arcName));
-		if (startingIds.count(arcName)) {
-			from->arcs.back()->isStart = true;
-			to->arcs.back()->isStart = true;
-		}
+		addEdge(r["fromGlobalId"].GetString(), r["toGlobalId"].GetString(), r["viaGlobalId"].GetString());
 	}
 
 	// Read controllers from DOM
 	for (auto &r : dom["controllers"].GetArray()) {
-		string id = r["globalId"].GetString();
-		Point *p = getOrMake(id);
+		Point *p = getOrMake(r["globalId"].GetString());
 		p->isController = true;
 	}
 
@@ -116,14 +107,7 @@ void Network::load_quick(const string &network_filename, const string &starting_
 		string toId = state.next(searchTo);
 		if (state.done()) break;
 		state.checkpoint();
-		Point *from = getOrMake(fromId);
-		Point *to = getOrMake(toId);
-		from->arcs.push_back(new(arcPool.malloc()) Arc(to, viaId));
-		to->arcs.push_back(new(arcPool.malloc()) Arc(from, viaId));
-		if (startingIds.count(viaId)) {
-			from->arcs.back()->isStart = true;
-			to->arcs.back()->isStart = true;
-		}
+		addEdge(fromId, toId, viaId);
 		log<LogParseEvents>() << "Row: " << viaId << " " << fromId << " " << toId << '\n';
 	}
 	state.revert();
@@ -149,7 +133,6 @@ void Network::load_dirty(const string &network_filename, const string &starting_
 	if (buffer == nullptr) return;
 
 	string arcName;
-	Point *from = nullptr, *to = nullptr;
 	char *first = nullptr, *second = nullptr, *third = nullptr;
 	int pos = 0;
 	char *cp = buffer.get();
@@ -185,15 +168,7 @@ void Network::load_dirty(const string &network_filename, const string &starting_
 					third[38] = '\0';
 					cp += 115;
 					pos = 0;
-					from = getOrMake(string(second));
-					to = getOrMake(string(third));
-					arcName = string(first);
-					from->arcs.push_back(new(arcPool.malloc()) Arc(to, arcName));
-					to->arcs.push_back(new(arcPool.malloc()) Arc(from, arcName));
-					if (startingIds.count(arcName)) {
-						from->arcs.back()->isStart = true;
-						to->arcs.back()->isStart = true;
-					}
+					addEdge(string(second), string(third), string(first));
 					break;
 				case 3:
 					third = cp;
