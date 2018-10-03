@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <boost/pool/pool.hpp>
+#include <boost/pool/object_pool.hpp>
 
 #include "Settings.h"
 
@@ -37,9 +37,9 @@ public:
 	// Memory pools.
 	// Allocate all points, arcs and nodes using these; they will not be destructed.
 	// Memory is freed when the network is destructed;
-	boost::pool<> nodePool{ sizeof(BCNode) };
-	boost::pool<> pointPool{ sizeof(Point) };
-	boost::pool<> arcPool{ sizeof(Arc) };
+	boost::object_pool<BCNode> nodePool;
+	boost::object_pool<Point> pointPool;
+	boost::object_pool<Arc> arcPool;
 
 	// Points of the network
 	std::unordered_map<std::string, Point*, IdHasher> pointMap;
