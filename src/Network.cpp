@@ -8,6 +8,8 @@ using std::min;
 #include <tuple>
 using std::make_tuple;
 
+using std::ostream;
+
 #include "rapidjson.h"
 using namespace rapidjson;
 
@@ -21,7 +23,9 @@ using namespace rapidjson;
 
 #include "Log.h"
 
-void Network::enumerateUpstreamFeatures() {
+void Network::enumerateUpstreamFeatures( ostream *result_stream ) {
+
+	outstream = result_stream;
 
 	log() << "Block-cut tree              ... ";
 	const Timer bctTime;

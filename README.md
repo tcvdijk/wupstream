@@ -44,12 +44,15 @@ See http://rapidjson.org/ and http://docopt.org/ for up to date versions.
 
 Compile using the following command in the src directory; it makes an executable in the bin directory.
 If your compiler is not set up to find the Boost include files, add `-I/path/to/boost` with the root of your boost directory.
+(Substitute `clang++` to use Clang.)
 
 ~~~
-g++ -O3 -msse4.2 -std=c++11 *.cpp -o ../bin/wupstream
+g++ -O3 -msse4.2 -std=c++17 *.cpp -o ../bin/wupstream
 ~~~
 
-Substitute `clang++` to use Clang.
+C++17 is used for the std string searchers.
+If your compiler does not support this, compile with `-DDONT_USE_STRING_SEARCHERS` and `-std=c++11` instead.
+This disables the "quick" parser.
 
 The resulting executable requires a processor with SSE4.2 support. If the executable does not run for this reason:
 
@@ -62,12 +65,12 @@ The resulting executable requires a processor with SSE4.2 support. If the execut
 Make a project file that has all .cpp files from the src directory and everything should be fine.
 Depending on your processor, you may need to remove `#define RAPIDJSON_SSE42` from rapidjson.h.
 
-### Experimental Parser
+### Logging
 
-Wüpstream contains an experimental parser specifically tuned for the GIS Cup file format (rather than any valid JSON).
-It requires 38-character IDs and makes assumptions about the order of the fields.
-Its use is not recommened.
-To use it anyway, run with the `--experimental-parser` option.
+By default, the program does no logging, but you can change this in `Log.h` by changing `DefaultLogDestination`.
+Setting it to `StdOut` will log to standard out; setting it to `LogFile` will log to a file called `log.txt`.
+The log will contain some basic timing information of the various steps of the program.
+
 
 ## Running the Demo
 
@@ -78,10 +81,6 @@ Wüpstream takes two or three arguments:
 3. Optionally, the output filename. Otherwise, output is given on stdout.
 
 The output will likely contain the some IDs multiple times.
-
-By default, the program does no logging, but you can change this in `Log.h` by changing `DefaultLogDestination`.
-Setting it to `StdOut` will log to standard out; setting it to `LogFile` will log to a file called `log.txt`.
-The log will contain some basic timing information of the various steps of the program.
 
 ### Linux
 
@@ -98,6 +97,14 @@ Compile however you normally do and run as under linux.
 Alternatively, configure the command line arguments in the project settings at
 `Project > [project name] Properties ... > Debugging > Command Arguments`.
 Example instances are available in the `test` directory.
+
+### Various Parsers
+
+Wüpstream contains an three parser of varying robustness and speed.
+Use of the default parser (which uses RapidJSON) is recommended.
+
+* The "quick" parser does not validate the JSON and makes various assumptions about its structure and the order of the attributes. It may fail without warnings. Enable it using `--quick-parser`.
+* The "dirty" parser is additionally tuned for the GIS Cup files and not implemented to be readable. It makes even more assumptions about the file (such as that all IDs are 38 characters long). It may crash or fail without warnings. Its use is not recommened. To use it anyway, run with `--dirty-parser`.
 
 # Running Tests
 

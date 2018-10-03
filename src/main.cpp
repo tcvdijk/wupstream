@@ -1,6 +1,18 @@
-// Recent Microsoft compilers *really* don't like fopen,
-// but other's don't consistently have fopen_s.
-#define _CRT_SECURE_NO_WARNINGS
+static const char USAGE[] = R"(Wupstream.
+Usage:
+  wupstream <network> <starting_points> [<output>] [--quick-parser|--dirty-parser]
+  wupstream (-h | --help)
+
+Arguments:
+  network          Input file in json format.
+  starting_points  Starting points in text format.
+  output           Output file; if omitted, output to stdout.
+
+Options:
+  -q --quick-parser  Faster, but might fail. Read the source for conditions.
+  -d --dirty-parser  Probably fastest if it works, but might crash or silently fail.
+  -h --help          Show this screen.
+)";
 
 #include <iostream>
 using std::cout;
@@ -14,16 +26,6 @@ using std::ostream;
 #include <string>
 using std::string;
 
-#include <cstdio>
-using std::fopen;
-
-#include <memory>
-using std::unique_ptr;
-
-#include "rapidjson.h"
-#include "rapidjson/error/en.h"
-const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
-
 #include "docopt.h"
 
 #include "Timer.h"
@@ -35,200 +37,49 @@ const auto RapidJsonParsingFlags = rapidjson::kParseNumbersAsStringsFlag;
 #include "Settings.h"
 #include "Log.h"
 
-static const char USAGE[] =
-R"(Wupstream.
-    Usage:
-      wupstream <network> <starting_points> [<output>] [--experimental-parser]
-      wupstream (-h | --help)
-
-    Arguments:
-      network          Input file in json format.
-      starting_points  Starting points in text format.
-      output           Output file; if omitted, output to stdout.
-
-    Options:
-      -e --experimental-parser  Use crazy parser. Fast, but might crash or silently fail.
-      -h --help                 Show this screen.
-)";
-
 int main(int argc, char **argv) {
 
 	std::map<std::string, docopt::value> args = docopt::docopt(USAGE,{ argv + 1, argv + argc },
 		true,          // show help if requested
 		"Wupstream");  // version string
 	
-	string networkFilename = args["<network>"].asString();
-	string startingFilename = args["<starting_points>"].asString();
-	const bool experimental_parser = args["--experimental-parser"].asBool();
+	string network_filename = args["<network>"].asString();
+	string starting_flename = args["<starting_points>"].asString();
+	const bool quick_parser = args["--quick-parser"].asBool();
+	const bool dirty_parser = args["--dirty-parser"].asBool();
 
-	ofstream outFile;
+
+	ofstream output_file;
 	if (args["<output>"]) {
-		string outputFilename = args["<output>"].asString();
-		outFile.open(outputFilename);
-		if (outFile.fail()) {
-			cerr << "Cannot open output file " << outputFilename << "\n";
+		string output_filename = args["<output>"].asString();
+		output_file.open(output_filename);
+		if (output_file.fail()) {
+			cerr << "Cannot open output file " << output_filename << "\n";
 			return 1;
 		}
 	}
 
 	const Timer totalTime;
 
+	// Load network from file
 	Network net;
-
-	// Read start nodes
-	log() << "Reading start nodes         ... ";
-	const Timer startTime;
-	std::ifstream startFile(startingFilename);
-	if (startFile.fail()) {
-		cerr << "Cannot open starting points file " << startingFilename << "\n";
-		return 2;
+	if (quick_parser) {
+		net.load_quick(network_filename, starting_flename);
 	}
-	string startId;
-	while (startFile >> startId) {
-		net.startingIds.insert(startId);
-	}
-	startTime.report();
-
-	// Read whole file into a buffer
-	log() << "Reading file                ... ";
-	const Timer fileTime;
-	FILE* fp = fopen(networkFilename.c_str(), fopenMode);
-	if (fp == nullptr) {
-		cerr << "Cannot open network file " << networkFilename << "\n";
-		return 3;
-	}
-	fseek(fp, 0, SEEK_END);
-	const size_t filesize = static_cast<size_t>(ftell(fp));
-	fseek(fp, 0, SEEK_SET);
-	unique_ptr<char[]> buffer( new char[filesize + 1] );
-	size_t readLength = fread(buffer.get(), 1, filesize, fp);
-	buffer[readLength] = '\0';
-	fclose(fp);
-	fileTime.report();
-
-	if (experimental_parser) {
-		// Parser 1: Crazy, but faster. Makes many assumptions about file format.
-		string arcName;
-		Point *from = nullptr, *to = nullptr;
-		char *first = nullptr, *second = nullptr, *third = nullptr;
-		int pos = 0;
-		char *cp = buffer.get();
-		while (*cp != '\0') {
-			char c = *cp++;
-			if (c == '\"') {
-				c = *cp++;
-				if (c == '{') {
-					switch (pos) {
-					case 0:
-						first = cp - 1;
-						first[38] = '\0';
-						cp += 40;
-						c = *cp++;
-						if (c == 'a') {
-							Point *p = getOrMake(net.pointPool, net.pointMap, string(first));
-							p->isController = true;
-							pos = 3;
-						}
-						else {
-							pos = 1;
-						}
-						cp += 74;
-						break;
-					case 1:
-						second = cp - 1;
-						second[38] = '\0';
-						cp += 115;
-						pos = 2;
-						break;
-					case 2:
-						third = cp - 1;
-						third[38] = '\0';
-						cp += 115;
-						pos = 0;
-						from = getOrMake(net.pointPool, net.pointMap, string(second));
-						to = getOrMake(net.pointPool, net.pointMap, string(third));
-						arcName = string(first);
-						from->arcs.push_back(new(net.arcPool.malloc()) Arc(to, arcName));
-						to->arcs.push_back(new(net.arcPool.malloc()) Arc(from, arcName));
-						if (net.startingIds.count(arcName)) {
-							from->arcs.back()->isStart = true;
-							to->arcs.back()->isStart = true;
-						}
-						break;
-					case 3:
-						third = cp;
-						third[38] = '\0';
-						cp += 115;
-						Point *p = getOrMake(net.pointPool, net.pointMap, string(third));
-						p->isController = true;
-					}
-				}
-			}
-		}
-		for (const string &s : net.startingIds) {
-			const auto it = net.pointMap.find(s);
-			if (it != net.pointMap.end()) {
-				Point *p = it->second;
-				p->isStart = true;
-			}
-		}
+	else if (dirty_parser) {
+		net.load_dirty(network_filename, starting_flename);
 	}
 	else {
-		// Parser 2: Slower, but accepts all valid json with the right structure.
-		log() << "Parsing                     ... ";
-		const Timer parseTime;
-		rapidjson::Document dom;
-		// In-situ parsing the buffer into DOM.
-		// Afterward, buffer no longer valid string
-		dom.ParseInsitu<RapidJsonParsingFlags>(buffer.get());
-		parseTime.report();
-		if (dom.HasParseError()) {
-			cerr << "JSON parse error (offset "	<< dom.GetErrorOffset() << "): " << GetParseError_En(dom.GetParseError()) << "\n";
-			return 4;
-		}
-
-		// Make dictionary for Point ids; make graph structure
-		log() << "Making dictionary and graph ... ";
-		const Timer dictTime;
-		for (auto &r : dom["rows"].GetArray()) {
-			Point *from = getOrMake(net.pointPool, net.pointMap, r["fromGlobalId"].GetString());
-			Point *to = getOrMake(net.pointPool, net.pointMap, r["toGlobalId"].GetString());
-			string arcName = r["viaGlobalId"].GetString();
-			from->arcs.push_back(new(net.arcPool.malloc()) Arc(to, arcName));
-			to->arcs.push_back(new(net.arcPool.malloc()) Arc(from, arcName));
-			if (net.startingIds.count(arcName)) {
-				from->arcs.back()->isStart = true;
-				to->arcs.back()->isStart = true;
-			}
-		}
-		for (const string &s : net.startingIds) {
-			const auto it = net.pointMap.find(s);
-			if (it != net.pointMap.end()) {
-				Point *p = it->second;
-				p->isStart = true;
-			}
-		}
-		dictTime.report();
-
-		// Read controllers from DOM
-		log() << "Reading controllers         ... ";
-		const Timer controllerTime;
-		for (auto &r : dom["controllers"].GetArray()) {
-			string id = r["globalId"].GetString();
-			Point *p = getOrMake(net.pointPool, net.pointMap, id);
-			p->isController = true;
-		}
-		controllerTime.report();
+		net.load(network_filename, starting_flename);
 	}
 	
-	// Enumerate upstream features; write them to outfile or cout
-	if (outFile.is_open()) {
-		net.outstream = &outFile;
+	// Compute and output upstream features
+	if (output_file.is_open()) {
+		net.enumerateUpstreamFeatures(&output_file);
 	}
 	else {
-		net.outstream = &cout;
+		net.enumerateUpstreamFeatures(&cout);
 	}
-	net.enumerateUpstreamFeatures();
 	
 	// Done.
 	log() << "\n\nTotal time: ";
