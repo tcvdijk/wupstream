@@ -3,7 +3,7 @@
 #ifndef INCLUDED_NODE
 #define INCLUDED_NODE
 
-#include <string>
+#include <vector>
 #include "Settings.h"
 
 class Point;

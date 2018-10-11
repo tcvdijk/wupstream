@@ -21,20 +21,14 @@ using std::cerr;
 #include <fstream>
 using std::ifstream;
 using std::ofstream;
-using std::ostream;
 
 #include <string>
 using std::string;
 
 #include "docopt.h"
 
-#include "Timer.h"
-#include "Util.h"
-#include "Point.h"
-#include "Arc.h"
-#include "BCNode.h"
 #include "Network.h"
-#include "Settings.h"
+#include "Timer.h"
 #include "Log.h"
 
 int main(int argc, char **argv) {

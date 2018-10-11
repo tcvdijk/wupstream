@@ -14,7 +14,6 @@ using std::ostream;
 using namespace rapidjson;
 
 #include "Timer.h"
-#include "Util.h"
 
 #include "Network.h"
 #include "Point.h"

@@ -1,5 +1,4 @@
 #include "BCNode.h"
-#include "Point.h"
 
 void BCNode::connect(BCNode *a, BCNode *b) {
 	// Make sure the reverseIndex is set correctly on both sides.
