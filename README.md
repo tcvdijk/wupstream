@@ -1,17 +1,17 @@
-# Wüpstream
+# WÃ¼pstream
 
-At [University Würzburg](http://www1.informatik.uni-wuerzburg.de/):
+At [University WÃ¼rzburg](http://www1.informatik.uni-wuerzburg.de/):
 Thomas C. van Dijk,
 Tobias Greiner,
 Nadja Henning,
 Felix Klesen,
-Andre Löffler.  
+Andre LÃ¶ffler.  
 At [ORTEC](http://www.ortec.com/):
 Bas den Heijer.
 
 ## Description
 
-Wüpstream calculates upstream features in networks and was developed for the ACM SIGSPATIAL GIS Cup 2018.
+WÃ¼pstream calculates upstream features in networks and was developed for the ACM SIGSPATIAL GIS Cup 2018.
 See http://sigspatial2018.sigspatial.org/giscup2018/ for a general description of the upstream problem.
 
 This repository contains a demonstration program - not a plug-and-play library.
@@ -23,20 +23,20 @@ First we compute a block-cut tree (augmented with information about the controll
 See the following paper for a somewhat more extensive description.
 
 * *Thomas C. van Dijk, Tobias Greiner, Bas den Heijer, Nadja Henning, Felix
-Klesen, and Andre Löffler.* 2018. **Wüpstream: Efficient Enumeration of Upstream
+Klesen, and Andre LÃ¶ffler.* 2018. **WÃ¼pstream: Efficient Enumeration of Upstream
 Features (GIS Cup).** In 26th ACM SIGSPATIAL International Conference
-on Advances in Geographic Information Systems (SIGSPATIAL ’18),
-November 6–9, 2018, Seattle, WA, USA. ACM, New York, NY, USA, 4 pages.
-https://doi.org/10.1145/3274895.3276475 (To appear.)
+on Advances in Geographic Information Systems (SIGSPATIAL â€™18),
+November 6â€“9, 2018, Seattle, WA, USA. ACM, New York, NY, USA, 4 pages.
+https://doi.org/10.1145/3274895.3276475
 
 ## Compiling the Demo
 
 ### Libraries
 
-Wüpstream uses Boost header-only libraries for small vector optimisation and memory pools.
+WÃ¼pstream uses Boost header-only libraries for small vector optimisation and memory pools.
 See https://www.boost.org/.
 
-Wüpstream uses RapidJSON for parsing and docopt for handling commandline arguments.
+WÃ¼pstream uses RapidJSON for parsing and docopt for handling commandline arguments.
 Convenience copies have been provided in the repository.
 See http://rapidjson.org/ and http://docopt.org/ for up to date versions.
 
@@ -74,7 +74,7 @@ The log will contain some basic timing information of the various steps of the p
 
 ## Running the Demo
 
-Wüpstream takes two or three arguments:
+WÃ¼pstream takes two or three arguments:
 
 1. Filename of the network (json).
 2. Starting nodes (txt).
@@ -100,7 +100,7 @@ Example instances are available in the `test` directory.
 
 ### Various Parsers
 
-Wüpstream contains an three parser of varying robustness and speed.
+WÃ¼pstream contains an three parser of varying robustness and speed.
 Use of the default parser (which uses RapidJSON) is recommended.
 
 * The "quick" parser does not validate the JSON and makes various assumptions about its structure and the order of the attributes. It may fail without warnings. Enable it using `--quick-parser`.
@@ -108,11 +108,11 @@ Use of the default parser (which uses RapidJSON) is recommended.
 
 # Running Tests
 
-The `test` directory contains a Python 3 script to test the input/output behaviour of Wüpstream.
+The `test` directory contains a Python 3 script to test the input/output behaviour of WÃ¼pstream.
 Its output is colour-coded if the `termcolor` package is available.
 (Windows may also require `colorama`.)
 
-Run it as follows, where `<program>` is an *absolute* path to the Wüpstream (or other) executable.
+Run it as follows, where `<program>` is an *absolute* path to the WÃ¼pstream (or other) executable.
 Relative paths may work depending on your system, but Python may claim the file is not found.
 
 * Go to the `tests` directory.
@@ -126,11 +126,11 @@ There are several batches of test.
 
 * The contest instances with 'officially' correct solutions.  These should all pass.
 * Small instances with our manual solution.  This includes a number of weird corner cases.  These should all pass.
-* The 'regression testing' instances with Wüpstream's own solution.  These will all pass, but we do not vouch for correctness.  If you change anything about the program and one of these tests unexpectedly fails, you now know where to look.
+* The 'regression testing' instances with WÃ¼pstream's own solution.  These will all pass, but we do not vouch for correctness.  If you change anything about the program and one of these tests unexpectedly fails, you now know where to look.
 
 # Libraries used
 
-Wüpstream uses:
+WÃ¼pstream uses:
 
 * RapidJSON, which is freely available under an MIT license.
 * docopt, which is freely available under an MIT license.
@@ -138,4 +138,4 @@ Wüpstream uses:
 
 # License
 
-Wüpstream is available under the MIT License.
+WÃ¼pstream is available under the MIT License.
